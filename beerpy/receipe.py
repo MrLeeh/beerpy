@@ -10,10 +10,12 @@ from collections import namedtuple
 import pandas as pd
 from scipy.interpolate import interp2d
 
-from .gravity import Gravity, pl_to_sg, pl_to_eg
+from .gravity import Gravity, pl_to_sg
+from .constants import DATA_DIR
 
 
-HOP_SATURATION_FILE = join(dirname(__file__), "hop_saturation.csv")
+HOP_SATURATION_FILE = join(dirname(__file__), DATA_DIR, "hop_saturation.csv")
+
 
 # Definition of namedtuple Malt
 Malt = namedtuple("Malt", ('name', 'extract_ratio'))
@@ -41,7 +43,7 @@ def _round(x):
 
 
 def _hop_saturation(cooktime, pl):
-    df = pd.read_csv(HOP_SATURATION_FILE, sep=';', decimal=',', index_col=0)
+    df = pd.read_csv(HOP_SATURATION_FILE, sep=',', decimal='.', index_col=0)
     x = [float(s.replace(',', '.')) for s in list(df.columns)]
     y = list(df.index)
     z = list([list(l) for l in df.to_records(index=False)])
@@ -83,7 +85,7 @@ def malt_composition(volume: float, pl: float,
             yield ratio * malt.extract_ratio
 
     wort_weight = float(volume) * float(pl_to_sg(pl)) / 1000.0
-    theoretical_extract = round(wort_weight * float(pl_to_eg(pl)))
+    theoretical_extract = wort_weight * pl * 10.0
     practical_extract = sum(specific_extract_ratio()) * efficiency
     total_weight = theoretical_extract / practical_extract
 
