@@ -13,17 +13,18 @@ Features
 
 ### Calculate alcohol from original wort and rest wort
 
-Make a rough calculation with only the original wort:
+Make a rough calculation given only the original gravity of the wort:
 
 ```python
 >>> from beerpy.alcohol import alcohol
 >>> from beerpy.gravity import Gravity, PL
->>> alcohol(Gravity(12, unit=PL))
+>>> alcohol(Gravity(12, unit=PL))  # given a gravity of 12 °Pl
 Alcohol: 4.5%
 
 ```
 
-Make a more exact calculation with original and rest wort:
+Make a more exact calculation by measuring the original and final gravity of the
+wort:
 
 ```python
 >>> from beerpy.alcohol import alcohol

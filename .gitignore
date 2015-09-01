@@ -3,4 +3,4 @@
 *.sublime-workspace
 
 doc/build
-
+__pycache__/

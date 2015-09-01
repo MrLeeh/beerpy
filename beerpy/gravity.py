@@ -1,6 +1,7 @@
 """
-Functions for converting gravity units. Source:
-http://www.mathe-fuer-hobbybrauer.de/bierrezepte/index.html
+Functions for converting gravity units. Sources:
+* http://www.mathe-fuer-hobbybrauer.de/bierrezepte/index.html
+* http://www.brewersfriend.com/plato-to-sg-conversion-chart/
 
 """
 
@@ -50,7 +51,7 @@ def pl_to_sg(val):
     :returns: specific gravity (SG)
 
     """
-    return int(_interpolate(_pl, _sg, val))
+    return 1.0 + (val / (258.6 - ((val / 258.2) * 227.1)))
 
 
 def eg_to_pl(val):
@@ -83,7 +84,7 @@ def sg_to_pl(val):
     :returns: gravity in °Pl
 
     """
-    return _interpolate(_sg, _pl, val)
+    return -616.868 + 1111.14 * val - 630.272 * val**2 + 135.997 * val ** 3
 
 
 def sg_to_eg(val):
