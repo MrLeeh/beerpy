@@ -1,12 +1,13 @@
 beerpy package
 ==============
 
-Copyright (c) 2015 by Stefan Lehmann
-licensed under the MIT license
-
-The beerpy package contains a collection of brewing calculation functions to
-make the brewers life a little bit easier. This collection is intended to grow
+* **Copyright (c):** 2015 Stefan Lehmann
+* **license:** MIT license
+* **description:** The beerpy package contains a collection of brewing calculation functions 
+to make the brewers life a little bit easier. This collection is intended to grow
 in complexety and hopefully in usefulness by time.
+
+[![Build Status](https://travis-ci.org/MrLeeh/beerpy.svg?branch=master)](https://travis-ci.org/MrLeeh/beerpy)
 
 Features
 --------
