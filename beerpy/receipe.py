@@ -4,18 +4,18 @@ http://www.mathe-fuer-hobbybrauer.de/bierrezepte/index.html
 
 """
 
-from os.path import join, dirname
+import os
 from collections import namedtuple
 
 import pandas as pd
 from scipy.interpolate import interp2d
 
-from .gravity import Gravity, pl_to_sg
-from .constants import DATA_DIR
+from .units.gravity import Gravity
+from .utilities import datadir
 
 
-HOP_SATURATION_FILE = join(dirname(__file__), DATA_DIR, "hop_saturation.csv")
-
+# datafile for hop saturation
+_f_hop_saturation = os.path.join(datadir(), "hop_saturation.csv")
 
 # Definition of namedtuple Malt
 Malt = namedtuple("Malt", ('name', 'extract_ratio'))
@@ -43,7 +43,7 @@ def _round(x):
 
 
 def _hop_saturation(cooktime, pl):
-    df = pd.read_csv(HOP_SATURATION_FILE, sep=',', decimal='.', index_col=0)
+    df = pd.read_csv(_f_hop_saturation, sep=',', decimal='.', index_col=0)
     x = [float(s.replace(',', '.')) for s in list(df.columns)]
     y = list(df.index)
     z = list([list(l) for l in df.to_records(index=False)])
@@ -51,19 +51,19 @@ def _hop_saturation(cooktime, pl):
     return f(pl, cooktime)
 
 
-def malt_composition(volume: float, pl: float,
+def malt_composition(volume: float, gravity: Gravity,
                      composition: '[(Malt, float),...]', efficiency=0.75):
     """
     Calculate the amount of malt needed to achieve a wort with the given
     `volume` and gravity (°Pl).
 
     :param volume: volume of the wort in liters
-    :param pl: gravity of the wort in °Pl
+    :param gravity: gravity of the wort
     :param composition: malt composition as a list of
         tuples. Each tuple contains the `Malt` and the share of the specific
         malt sort on the overall malt. The sum of all composition parts should
         result in one.
-    :result: overall malt weight in kg, weight of each malt sort in kg
+    :return: overall malt weight in kg, weight of each malt sort in kg
 
 
     :Example:
@@ -72,8 +72,8 @@ def malt_composition(volume: float, pl: float,
         The composition should contain 80% of Pilsener malt and 20% of Munich
         malt.
 
-        >>> malt_composition(20, 20, [(PILSENER_MALT, 0.8), (MUNICH_MALT, 0.2)])
-        (6.93, [('Pilsener Malz', 5.54), ('Münchener Malz', 1.39)])
+        >>> malt_composition(22, Gravity(14), [(PILSENER_MALT, 0.8), (MUNICH_MALT, 0.2)])
+        (5.44, [('Pilsener Malz', 4.35), ('Münchener Malz', 1.09)])
 
         As result an amount of 6.93kg of malt is needed.
         5.54kg of Pilsener malt and 1.39kg of Munich malt.
@@ -84,8 +84,8 @@ def malt_composition(volume: float, pl: float,
         for malt, ratio in composition:
             yield ratio * malt.extract_ratio
 
-    wort_weight = float(volume) * float(pl_to_sg(pl)) / 1000.0
-    theoretical_extract = wort_weight * pl * 10.0
+    wort_weight = float(volume) * gravity.sg
+    theoretical_extract = wort_weight * gravity.pl * 10.0
     practical_extract = sum(specific_extract_ratio()) * efficiency
     total_weight = theoretical_extract / practical_extract
 
@@ -103,6 +103,7 @@ def hop_quantity(ibu, alpha, wort_volume, cooktime, gravity: Gravity):
     :param wort_volume: quantity of wort in liters
     :param cooktime: cooking time in minutes
     :param gravity: gravity of the wort
+    :return: amount of hops in grams
 
     """
     saturation = _hop_saturation(cooktime, gravity.pl)[0]

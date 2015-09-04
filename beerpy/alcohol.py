@@ -4,7 +4,7 @@ Module for calculating the expected alcohol content of a beer.
 """
 
 
-from .gravity import Gravity
+from .units.gravity import Gravity
 
 
 class Alcohol:

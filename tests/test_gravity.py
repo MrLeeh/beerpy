@@ -1,5 +1,5 @@
 import pytest
-from beerpy.gravity import pl_to_sg, sg_to_pl
+from beerpy.units.gravity import pl_to_sg, sg_to_pl
 
 
 def test_pl_to_sg():

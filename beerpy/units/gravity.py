@@ -4,14 +4,13 @@ http://www.brewersfriend.com/plato-to-sg-conversion-chart
 
 """
 
-from os.path import join, dirname
+import os
 
 import pandas as pd
 from scipy.interpolate import interp1d
-from .constants import DATA_DIR
+from ..utilities import datadir
 
 
-GRAVITY_FILE = join(dirname(__file__), DATA_DIR, "gravity.csv")
 FCT_DATA = "data"
 FCT_POLY = "poly"
 
@@ -21,7 +20,9 @@ SG = "sg"  # unit specific gravity
 SG_UNIT = "kg/m³"
 
 
-_df_gravity = pd.read_csv(GRAVITY_FILE, sep=',', decimal='.')
+_f_gravity = os.path.join(datadir(), "gravity.csv")
+_df_gravity = pd.read_csv(_f_gravity, sep=',', decimal='.')
+
 _plato = list(_df_gravity.Plato)
 _sg = list(_df_gravity.SG)
 
@@ -113,8 +114,7 @@ class Gravity:
         elif unit == PL:
             self.pl = value
         else:
-            raise TypeError("unit must have value PL, SG or"
-                            "EG")
+            raise TypeError("unit must have value PL or SG")
 
     def __repr__(self):
         if self._unit == SG:
