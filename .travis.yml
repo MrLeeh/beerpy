@@ -7,8 +7,11 @@ python:
   # - "3.5-dev"
   - "nightly"
 
+before_install:
+    - sudo apt-get install -qq python-scipy
+
 # command to install dependencies
 install: 
-  - pip install .
   - pip install -r requirements.txt
+  - pip install .
 script: py.test
