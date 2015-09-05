@@ -19,37 +19,45 @@ def _celsius_to_fahrenheit(celsius: float):
 
 class Temperature:
 
-    def __init__(self, value, unit: str=CELSIUS):
+    def __init__(self, value: float, unit: str=CELSIUS):
         # unit string
+        self.value = value
         self._unit = unit
 
         # safe value in celsius
         assert unit in _units, "unit parameter not in {}".format(_units)
 
-        if unit == CELSIUS:
-            self._celsius = value
-        elif unit == FAHRENHEIT:
-            self._celsius = _fahrenheit_to_celsius(value)
-
     def __repr__(self):
-        if self._unit == CELSIUS:
-            val = self.celsius
-        elif self._unit == FAHRENHEIT:
-            val = self.fahrenheit
-        return "Temperature: {}{}".format(val, self._unit)
+        return "Temperature: {}{}".format(self.value, self.unit)
+
+    @property
+    def unit(self):
+        return self._unit
 
     @property
     def celsius(self):
-        return self._celsius
+        if self.unit == CELSIUS:
+            return self.value
+        elif self.unit == FAHRENHEIT:
+            return _fahrenheit_to_celsius(self.value)
 
     @celsius.setter
     def celsius(self, value):
-        self._celsius = value
+        if self.unit == CELSIUS:
+            self.value = value
+        elif self.unit == FAHRENHEIT:
+            self.value = _celsius_to_fahrenheit(value)
 
     @property
     def fahrenheit(self):
-        return _celsius_to_fahrenheit(self._celsius)
+        if self.unit == CELSIUS:
+            return _celsius_to_fahrenheit(self.value)
+        elif self.unit == FAHRENHEIT:
+            return self.value
 
     @fahrenheit.setter
     def fahrenheit(self, value):
-        self._celsius = _fahrenheit_to_celsius(value)
+        if self.unit == CELSIUS:
+            self.value = _fahrenheit_to_celsius(value)
+        elif self.unit == FAHRENHEIT:
+            self.value = value

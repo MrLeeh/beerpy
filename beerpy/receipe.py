@@ -84,8 +84,8 @@ def malt_composition(volume: float, gravity: Gravity,
         for malt, ratio in composition:
             yield ratio * malt.extract_ratio
 
-    wort_weight = float(volume) * gravity.sg
-    theoretical_extract = wort_weight * gravity.pl * 10.0
+    wort_weight = float(volume) * gravity.specific_gravity
+    theoretical_extract = wort_weight * gravity.plato * 10.0
     practical_extract = sum(specific_extract_ratio()) * efficiency
     total_weight = theoretical_extract / practical_extract
 
@@ -106,5 +106,5 @@ def hop_quantity(ibu, alpha, wort_volume, cooktime, gravity: Gravity):
     :return: amount of hops in grams
 
     """
-    saturation = _hop_saturation(cooktime, gravity.pl)[0]
+    saturation = _hop_saturation(cooktime, gravity.plato)[0]
     return ibu * wort_volume * 10 / (alpha * saturation)

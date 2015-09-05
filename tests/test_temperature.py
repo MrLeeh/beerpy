@@ -6,7 +6,7 @@ def test_init_temperature():
     t1 = units.Temperature(20)
     assert repr(t1) == "Temperature: 20°C"
     t2 = units.Temperature(68, units.FAHRENHEIT)
-    assert repr(t2) == "Temperature: 68.0°F"
+    assert repr(t2) == "Temperature: 68°F"
 
 
 def test_conversion():

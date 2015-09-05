@@ -14,11 +14,10 @@ from ..utilities import datadir
 FCT_DATA = "data"
 FCT_POLY = "poly"
 
-PL = "pl"  # unit degree plato
-PL_UNIT = "°P"
-SG = "sg"  # unit specific gravity
-SG_UNIT = "kg/m³"
 
+PLATO = "°P"
+SPECIFIC_GRAVITY = "kg/m³"
+_units = (PLATO, SPECIFIC_GRAVITY)
 
 _f_gravity = os.path.join(datadir(), "gravity.csv")
 _df_gravity = pd.read_csv(_f_gravity, sep=',', decimal='.')
@@ -71,12 +70,12 @@ def _interpolate(xdata, ydata, xval):
     return f(xval)
 
 
-def pl_to_sg(pl, fct=FCT_DATA):
+def _pl_to_sg(pl, fct=FCT_DATA):
     """
     Calculate specific gravity from °Pl.
 
     :param pl: gravity in °Pl
-    :returns: specific gravity (SG)
+    :returns: specific gravity (SPECIFIC_GRAVITY)
 
     """
     if fct == FCT_DATA:
@@ -87,11 +86,11 @@ def pl_to_sg(pl, fct=FCT_DATA):
         raise ValueError("value for parameter fct is not valid.")
 
 
-def sg_to_pl(sg, fct=FCT_DATA):
+def _sg_to_pl(sg, fct=FCT_DATA):
     """
     Calculate °Pl from specific gravity.
 
-    :param sg: specific gravity (SG)
+    :param sg: specific gravity (SPECIFIC_GRAVITY)
     :returns: gravity in °Pl
 
     """
@@ -105,50 +104,53 @@ def sg_to_pl(sg, fct=FCT_DATA):
 
 class Gravity:
 
-    def __init__(self, value, unit=PL):
-        self._sg = None
+    def __init__(self, value, unit=PLATO):
+        self.value = value
         self._unit = unit
 
-        if unit == SG:
-            self.sg = value
-        elif unit == PL:
-            self.pl = value
-        else:
-            raise TypeError("unit must have value PL or SG")
+        assert unit in _units, "unit parameter not in {}".format(_units)
 
     def __repr__(self):
-        if self._unit == SG:
-            val = self.sg
-            unit = SG_UNIT
-        elif self._unit == PL:
-            val = self.pl
-            unit = PL_UNIT
-        else:
-            return "Gravity: None"
-        return "Gravity: {}{}".format(val, unit)
+        return "Gravity: {}{}".format(self.value, self.unit)
+
+    @property
+    def unit(self):
+        return self._unit
 
     # pl property
     @property
-    def pl(self):
+    def plato(self):
         """
         get / set value of the gravity in °Pl
 
         """
-        return sg_to_pl(self._sg)
+        if self.unit == PLATO:
+            return self.value
+        elif self.unit == SPECIFIC_GRAVITY:
+            return _sg_to_pl(self.value)
 
-    @pl.setter
-    def pl(self, value):
-        self._sg = pl_to_sg(value)
+    @plato.setter
+    def plato(self, value):
+        if self.unit == PLATO:
+            self.value = value
+        elif self.unit == SPECIFIC_GRAVITY:
+            self.value = _pl_to_sg(value)
 
     # sg property
     @property
-    def sg(self):
+    def specific_gravity(self):
         """
         get / set value of the gravity in kg/m³
 
         """
-        return self._sg
+        if self.unit == PLATO:
+            return _pl_to_sg(self.value)
+        elif self.unit == SPECIFIC_GRAVITY:
+            return self.value
 
-    @sg.setter
-    def sg(self, value):
-        self._sg = value
+    @specific_gravity.setter
+    def specific_gravity(self, value):
+        if self.unit == PLATO:
+            self.value = _sg_to_pl(value)
+        elif self.unit == SPECIFIC_GRAVITY:
+            self.value = value
