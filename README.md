@@ -7,8 +7,6 @@ beerpy package
 to make the brewers life a little bit easier. This collection is intended to grow
 in complexety and hopefully in usefulness by time.
 
-[![Build Status](https://travis-ci.org/MrLeeh/beerpy.svg?branch=master)](https://travis-ci.org/MrLeeh/beerpy)
-
 Features
 --------
 
