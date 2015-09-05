@@ -21,22 +21,22 @@ fruit lambic  6.0        9.0
 
 """
 
-from os.path import join, dirname
+import os
 import pandas as pd
 from scipy.interpolate import interp1d
 
-from .constants import DATA_DIR
+from . import units
+from .utilities import datadir
 
-
-CARBONATE_FILE = join(dirname(__file__), DATA_DIR, "carbonate.csv")
+CARBONATE_FILE = os.path.join(datadir(), "carbonate.csv")
 
 
 _df = pd.read_csv(CARBONATE_FILE, sep=",", decimal=".")
-_temperature = list(_df.temperature)
+_celsius = list(_df.temperature)
 _carbonate = list(_df.carbonate)
 
 
-def saturation(temp: float) -> float:
+def saturation(temp: units.Temperature) -> float:
     """
     Calculate the carbonate saturiation concentration for the
     given temperature.
@@ -45,23 +45,23 @@ def saturation(temp: float) -> float:
     :returns: carbonate saturation concentration in g/l
 
     """
-    f = interp1d(_temperature, _carbonate)
+    f = interp1d(_celsius, _carbonate)
     try:
-        return f(temp)
+        return f(temp.celsius)
     except ValueError as e:
         raise ValueError(
             "The value for temperature must be in range ({:.1f}..{:.1f}°C)"
-            .format(min(_temperature), max(_temperature))
+            .format(min(_celsius), max(_celsius))
         ) from e
 
 
-def carbonisation(conc: float, temp: float) -> float:
+def carbonisation(conc: float, temp: units.Temperature) -> float:
     """
     Calculate the necessary carbonation to achieve the aimed carbonate
     concentration at the given fermentation temperature.
 
     :param conc: aimed carbonate concentration in g/l
-    :param temp: fermentation temperature in °C
+    :param temp: fermentation temperature
     :returns: necessary carbonation in g/l
 
     """

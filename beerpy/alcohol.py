@@ -17,7 +17,7 @@ class Alcohol:
         return "Alcohol: {:.1f}%".format(self.value)
 
 
-def alcohol(og: Gravity, fg=None) -> Alcohol:
+def alcohol(og: Gravity, fg: Gravity=None) -> Alcohol:
     """
     Calculate the alcohol from a given original gravity and / or rest gravity.
 
