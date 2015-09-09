@@ -28,6 +28,6 @@ def alcohol(og: Gravity, fg: Gravity=None) -> Alcohol:
     """
 
     if fg is None:
-        return Alcohol(og.pl * 0.75 / 2)
+        return Alcohol(og.plato * 0.75 / 2)
     else:
-        return Alcohol((og.pl - fg.pl) / 2)
+        return Alcohol((og.plato - fg.plato) / 2)
