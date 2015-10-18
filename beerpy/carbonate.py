@@ -1,5 +1,8 @@
 """
-Module for calculating the beer carbonation.
+carbonate.py - Module for calculating the beer carbonation
+
+Copyright (c) 2015 by Stefan Lehmann,
+licensed under the MIT license
 
 Typical carbonate concentrations for common beer types are listed in the table
 below [1]_.

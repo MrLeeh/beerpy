@@ -20,7 +20,6 @@ _f_hop_saturation = os.path.join(datadir(), "hop_saturation.csv")
 # Definition of namedtuple Malt
 Malt = namedtuple("Malt", ('name', 'extract_ratio'))
 
-
 # Different Malts
 PILSENER_MALT = Malt("Pilsener Malz", 800)
 WIENER_MALT = Malt("Wiener Malz", 800)

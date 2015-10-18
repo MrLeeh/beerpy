@@ -1,6 +1,13 @@
 beerpy package
 ==============
 
+Subpackages
+-----------
+
+.. toctree::
+
+    beerpy.units
+
 Submodules
 ----------
 
@@ -20,26 +27,18 @@ beerpy.carbonate module
     :undoc-members:
     :show-inheritance:
 
-beerpy.constants module
------------------------
-
-.. automodule:: beerpy.constants
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-beerpy.gravity module
----------------------
-
-.. automodule:: beerpy.gravity
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 beerpy.receipe module
 ---------------------
 
 .. automodule:: beerpy.receipe
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+beerpy.utilities module
+-----------------------
+
+.. automodule:: beerpy.utilities
     :members:
     :undoc-members:
     :show-inheritance:

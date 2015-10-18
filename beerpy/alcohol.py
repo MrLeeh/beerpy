@@ -1,5 +1,8 @@
 """
-Module for calculating the expected alcohol content of a beer.
+alcohol.py - calculating expected alcohol content of beer,
+
+Copyright (c) 2015 by Stefan Lehmann,
+licensed under the MIT license
 
 """
 
